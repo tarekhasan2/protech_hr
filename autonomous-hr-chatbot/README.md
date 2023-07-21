@@ -11,9 +11,9 @@
 6. go to repository by - `cd autonomous-hr-chatbot` 
 7. run this 3 commend:
 	i. `export OPENAI_API_KEY=YOUR OPENAI KEY`
-	ii. `export PINECONE_API_KEY=YOUR_PINECONE_API_KEY`
-	iii. `export PINECONE_API_ENV=YOUR_PINECONE_API_ENV`
-8. Run `streamlit run hr_agent_frontent.py` in your terminal
+	ii. `export PINECONE_API_KEY=e80c9a1c-d3ae-424f-a61d-f2f7b6aad746`
+	iii. `export PINECONE_API_ENV=northamerica-northeast1-gcp`
+8. Run `streamlit run hr_agent_frontend.py` in your terminal
 
 
 ---

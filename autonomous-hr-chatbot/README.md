@@ -9,7 +9,11 @@
 4. Navigate to the local directory where is `Pipfile` and run this command in your terminal to install all prerequisite modules - `pipenv install`
 5. activate the virtual env with - `pipenv shell`
 6. go to repository by - `cd autonomous-hr-chatbot` 
-7. Run `streamlit run hr_agent_frontent.py` in your terminal
+7. run this 3 commend:
+	i. `export OPENAI_API_KEY=YOUR OPENAI KEY`
+	ii. `export PINECONE_API_KEY=YOUR_PINECONE_API_KEY`
+	iii. `export PINECONE_API_ENV=YOUR_PINECONE_API_ENV`
+8. Run `streamlit run hr_agent_frontent.py` in your terminal
 
 
 ---

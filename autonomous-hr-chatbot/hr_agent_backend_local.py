@@ -12,11 +12,15 @@ from langchain.tools.python.tool import PythonAstREPLTool
 from langchain.agents import initialize_agent, Tool
 from langchain.agents import AgentType
 from langchain import LLMMathChain
-
+import os
 # initialize pinecone client and connect to pinecone index
+PINECONE_API_KEY = os.environ['PINECONE_API_KEY']
+PINECONE_API_ENV = os.environ['PINECONE_API_ENV']
+OPENAI_API_KEY   = os.environ['OPENAI_API_KEY']
+
 pinecone.init(
-        api_key="e80c9a1c-d3ae-424f-a61d-f2f7b6aad746",  
-        environment="northamerica-northeast1-gcp"  
+        api_key=PINECONE_API_KEY,  
+        environment=PINECONE_API_ENV  
 ) 
 
 index_name = 'tk-policy'
@@ -25,7 +29,7 @@ index = pinecone.Index(index_name) # connect to pinecone index
 # initialize embeddings object; for use with user query/input
 embed = OpenAIEmbeddings(
                 model = 'text-embedding-ada-002',
-                openai_api_key="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",
+                openai_api_key=OPENAI_API_KEY,
             )
 
 # initialize langchain vectorstore(pinecone) object
@@ -35,7 +39,7 @@ vectorstore = Pinecone(
 )
 
 llm = ChatOpenAI(    
-    openai_api_key="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", 
+    openai_api_key=OPENAI_API_KEY, 
     model_name="gpt-3.5-turbo", 
     temperature=0.0
     )

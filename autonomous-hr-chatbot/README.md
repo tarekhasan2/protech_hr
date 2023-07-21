@@ -1,34 +1,18 @@
 # HR Chatbot built using ChatGPT, LangChain, Pinecone and Streamlit
 
 
-#### How to use this repo
-
-1. Install python 3.10. [Windows](https://www.tomshardware.com/how-to/install-python-on-windows-10-and-11#:~:text=1.,and%20download%20the%20Windows%20installer.&text=2.,is%20added%20to%20your%20path.), [Mac](https://www.codingforentrepreneurs.com/guides/install-python-on-macos/) 
-2. Clone the repo to a local directory.
-3. Install 'pipenv' with - `pip install pipenv`
-4. Navigate to the local directory where is `Pipfile` and run this command in your terminal to install all prerequisite modules - `pipenv install`
-5. activate the virtual env with - `pipenv shell`
-6. go to repository by - `cd autonomous-hr-chatbot` 
-7. run this 3 commend:
-	i. `export OPENAI_API_KEY=YOUR OPENAI KEY`
-	ii. `export PINECONE_API_KEY=YOUR_PINECONE_API_KEY`
-	iii. `export PINECONE_API_ENV=YOUR_PINECONE_API_ENV`
-8. Run `streamlit run hr_agent_frontent.py` in your terminal
-
-
 ---
-### Tech Stack
+#### HOW TO DEPLOY THE APP IN AZURE
 ---
 
-[Azure OpenAI Service](https://azure.microsoft.com/en-us/products/cognitive-services/openai-service) - the OpenAI service offering for Azure customers.  
-[LangChain](https://python.langchain.com/docs/get_started/introduction.html) - development frame work for building apps around LLMs.    
-[Pinecone](https://www.pinecone.io/) - the vector database for storing the embeddings.  
-[Streamlit](https://streamlit.io/) - used for the front end. Lightweight framework for deploying python web apps.  
-[Azure Data Lake](https://azure.microsoft.com/en-us/solutions/data-lake) - for landing the employee data csv files. Any other cloud storage should work just as well (blob, S3 etc).    
-[Azure Data Factory](https://azure.microsoft.com/en-ca/products/data-factory/) - used to create the data pipeline.  
-[SAP HCM](https://www.sap.com/sea/products/hcm/what-is-sap-hr.html) - the source system for employee data.   
+1. You need some keys to deploy this app:
+	1. Pinecone api key and api env: You get it in Pinecone](https://www.pinecone.io/). Just create a free account.
+	2. Azure openai key, base, deployment name: you will get this in Azure OpenAI Service](https://azure.microsoft.com/en-us/products/cognitive-services/openai-service). 
+	3. Azure storage url, account keys and account name. You will get this in Azure Data Lake](https://azure.microsoft.com/en-us/solutions/data-lake). Before do that upload employee_data.csv file to Azure Data Lake Storage.  
 
-### Video Demo 
----
+2. Now put all the keys in Dockerfile line[9-16].
+Docker container is ready to deploy. 
 
-[Youtube Link](https://www.youtube.com/watch?v=id7XRcEIBvg&ab_channel=StephenBonifacio)
+3. To deploy this app please follw the instruction from "Part 3: Deploy your Dockerized App to Azure": https://towardsdatascience.com/beginner-guide-to-streamlit-deployment-on-azure-f6618eee1ba9
+
+If you failed to deploy or need any help please contact me.

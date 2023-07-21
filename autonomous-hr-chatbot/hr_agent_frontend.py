@@ -1,8 +1,7 @@
 import streamlit as st
 import random
 from streamlit_chat import message
-#from hr_agent_backend_azure import get_response
-from hr_agent_backend_local import get_response
+from hr_agent_backend_azure import get_response
 
 
 def process_input(user_input):

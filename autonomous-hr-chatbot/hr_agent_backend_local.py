@@ -20,8 +20,7 @@ import os
 # initialize pinecone client and connect to pinecone index
 # PINECONE_API_KEY = os.environ['PINECONE_API_KEY']
 # PINECONE_API_ENV = os.environ['PINECONE_API_ENV']
-# OPENAI_API_KEY   = os.environ['OPENAI_API_KEY']
-OPENAI_API_KEY = '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'
+OPENAI_API_KEY   = os.environ['OPENAI_API_KEY']
 PINECONE_API_ENV = 'northamerica-northeast1-gcp'
 PINECONE_API_KEY = 'e80c9a1c-d3ae-424f-a61d-f2f7b6aad746'
 ############

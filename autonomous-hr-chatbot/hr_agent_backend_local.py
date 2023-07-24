@@ -1,32 +1,39 @@
 # load core modules
-import pinecone
-from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.vectorstores import Pinecone
-from langchain.chat_models import AzureChatOpenAI, ChatOpenAI
-from langchain.chains import RetrievalQA
+import pinecone ## Pinecone is vactorstore. We use it to store vactor.
+from langchain.embeddings.openai import OpenAIEmbeddings ## We use openai embedding to embad input string. It check the similarity in vactor string.
+from langchain.vectorstores import Pinecone ## this is pinecone from langchain. This is for use in langchain pinecone code. 
+from langchain.chat_models import ChatOpenAI ## ChatOpenAI use to create the Large Language Model. 
+from langchain.chains import RetrievalQA ## This is retriver that use to retrive a correct vactor from vactor store
 
-import pandas as pd
-from azure.storage.filedatalake import DataLakeServiceClient
+import pandas as pd ## pandas use to read dataframe
 from io import StringIO
-from langchain.tools.python.tool import PythonAstREPLTool
-from langchain.agents import ZeroShotAgent, Tool, AgentExecutor, AgentType
-from langchain import LLMMathChain
-from langchain.memory import ConversationBufferMemory
-from langchain import OpenAI, LLMChain
+from langchain.tools.python.tool import PythonAstREPLTool ## This is python repl that use to get result from Dataframe immediately. 
+from langchain.agents import ZeroShotAgent, Tool, AgentExecutor, AgentType ## AgentExecutor is use to call agent, call tool, get the result and also passing all that information back into the Agent.
+from langchain import LLMMathChain ## This is a langchain object that use for mathematical calculation.
+from langchain.memory import ConversationBufferMemory ## This create a memory
+from langchain import OpenAI, LLMChain 
 
 
 import os
-# initialize pinecone client and connect to pinecone index
-PINECONE_API_KEY = os.environ['PINECONE_API_KEY']
-PINECONE_API_ENV = os.environ['PINECONE_API_ENV']
-OPENAI_API_KEY   = os.environ['OPENAI_API_KEY']
 
+########### This are important API keys
+# initialize pinecone client and connect to pinecone index
+# PINECONE_API_KEY = os.environ['PINECONE_API_KEY']
+# PINECONE_API_ENV = os.environ['PINECONE_API_ENV']
+# OPENAI_API_KEY   = os.environ['OPENAI_API_KEY']
+OPENAI_API_KEY = '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'
+PINECONE_API_ENV = 'northamerica-northeast1-gcp'
+PINECONE_API_KEY = 'e80c9a1c-d3ae-424f-a61d-f2f7b6aad746'
+############
+
+
+#### Initializing pinecone 
 pinecone.init(
         api_key=PINECONE_API_KEY,  
         environment=PINECONE_API_ENV  
 ) 
 
-index_name = 'tk-policy'
+index_name = 'tk-policy' # This is our index name in out vactorstore
 index = pinecone.Index(index_name) # connect to pinecone index
 
 # initialize embeddings object; for use with user query/input
@@ -41,13 +48,16 @@ vectorstore = Pinecone(
     index, embed.embed_query, text_field
 )
 
+
+#### This is out Large Language Model by openai
 llm = ChatOpenAI(    
     openai_api_key=OPENAI_API_KEY, 
     model_name="gpt-3.5-turbo", 
     temperature=0.0
     )
 
-# initialize vectorstore retriever object
+
+# initialize vectorstore retriever object. This function will use to retriev vactor from vactorstore
 employee_policy = RetrievalQA.from_chain_type(
     llm=llm,
     chain_type="stuff",
@@ -68,6 +78,11 @@ user = 'Alexander Verdad' # set user
 df_columns = df.columns.to_list() # print column names of df
 
 # prep the (tk policy) vectordb retriever, the python_repl(with df access) and langchain calculator as tools for the agent
+## This is out 3 tools. "Employee Policies" use to answer query from policy documents. "Employee Database" use to answer from employee csv file
+## and Calculator use for matematical calculation. "description" is importent, it is prompt. this prompt use to give instruction to openai when to 
+## use which tool.
+
+
 tools = [
     Tool(
         name = "Employee Policies",
@@ -112,17 +127,21 @@ suffix = """Begin!"
 Question: {input}
 {agent_scratchpad}"""
 
+# ZeroShotAgent use for create agen that has no mamory. It will work only on current action. 
 prompt = ZeroShotAgent.create_prompt(
     tools,
     prefix=prefix,
     suffix=suffix,
     input_variables=["input", "chat_history", "agent_scratchpad"],
 )
-memory = ConversationBufferMemory(memory_key="chat_history")
+memory = ConversationBufferMemory(memory_key="chat_history") ### This class use to create a memory 
 
-llm_chain = LLMChain(llm=llm, prompt=prompt)
+llm_chain = LLMChain(llm=llm, prompt=prompt) ## It create a chain of prompt and LLM and create output.
 
-agent = ZeroShotAgent(llm_chain=llm_chain, tools=tools, verbose=True)
+
+agent = ZeroShotAgent(llm_chain=llm_chain, tools=tools, verbose=True) # ZeroShotAgent use for create agen that has no mamory. It will work only on current action.
+
+## This agent chain will manage to call agent, call tool, get the result and also passing all that information back into the mamory. We give mamory to it.
 agent_chain = AgentExecutor.from_agent_and_tools(
     agent=agent, tools=tools, verbose=True, memory=memory
 )
@@ -130,7 +149,7 @@ agent_chain = AgentExecutor.from_agent_and_tools(
 # define q and a function for frontend
 def get_response(user_input):
     try:
-        response = agent_chain.run(user_input)
+        response = agent_chain.run(user_input) ### get the response from agent chain
     
     except Exception as e:
         response = str(e)
